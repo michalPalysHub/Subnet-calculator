@@ -71,8 +71,32 @@ def get_network_adress(IP, mask):
     return network_adress
 
 
-def get_broadcast_adress(IP):
-    return
+def get_broadcast_adress_in_decimal(IP, mask):
+    ip = []
+    mask = get_mask_in_binary_from_adress(mask)
+    broadcast_adress = []
+
+    for i in range(0, 4):
+        ip.append(IP[i])
+
+    for i in range(0, 4):
+        a = ip[i][2:].zfill(8)
+        ip[i] = a
+
+    for i in range(0, 4):
+        broadcast_adress.append(int(ip[i], 2) | int(mask[i], 2))
+
+    return broadcast_adress
+
+
+def get_broadcast_adress_in_binary(IP, mask):
+    broadcast_binary = get_broadcast_adress_in_decimal(IP, mask)
+
+    for i in range(0, 4):
+        a = str(bin(broadcast_binary[i]))[2:].zfill(8)
+        broadcast_binary[i] = a
+
+    return broadcast_binary
 
 
 def subnet_calculator():
@@ -96,7 +120,11 @@ def subnet_calculator():
     print("This network is {}".format(public_or_private_adress(IP)))
     print("Mask in binary: {}".format(get_mask_in_binary_from_adress(mask)))
     print("Mask in decimal: {}".format(get_mask_in_decimal_from_adress(mask)))
+    print("Broadcast adress in binary: {}".format(get_broadcast_adress_in_binary(IP, mask)))
+    print("Broadcast adress in decimal: {}".format(get_broadcast_adress_in_decimal(IP, mask)))
+
 
 # MAIN
+
 
 subnet_calculator()
