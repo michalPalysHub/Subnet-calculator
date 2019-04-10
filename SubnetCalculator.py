@@ -212,8 +212,9 @@ def last_host_adress_in_binary(IP, mask):
     return host
 
 
-def max_amount_of_hosts():
-    print "TODO"
+def total_number_of_hosts(mask):
+    amount = 2 ** (32 - int(mask)) - 2
+    return amount
 
 
 def subnet_calculator():
@@ -273,5 +274,7 @@ def subnet_calculator():
     print("Last host adress in decimal: {}.{}.{}.{}".format(l_host[0], l_host[1], l_host[2], l_host[3]))
     f.write("Last host adress in decimal: {}.{}.{}.{}\n".format(l_host[0], l_host[1], l_host[2], l_host[3]))
 
+    print("Total number of hosts equals {}".format(total_number_of_hosts(mask)))
+    f.write("Total number of hosts equals {}\n".format(total_number_of_hosts(mask)))
 
 subnet_calculator()
