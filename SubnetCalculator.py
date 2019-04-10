@@ -1,11 +1,20 @@
 import sys
+import socket
 
 f = open("subnet_calculator.txt", "a")
+
+
+def is_ip_adress_passed():
+    if not sys.argv[1]:
+        return False
+    else:
+        return True
 
 
 def is_ip_adress_valid():
     adress = sys.argv[1].split('/');
     IP = adress[0].split('.')
+    mask = adress[1]
 
     if len(IP) != 4:
         print("There have to be 4 octets!")
@@ -20,8 +29,6 @@ def is_ip_adress_valid():
             if char.isalpha():
                 print("IP adress contains a letter!")
                 return False
-
-    mask = adress[1]
 
     for char in mask:
         if char.isalpha():
@@ -101,9 +108,13 @@ def get_mask_in_decimal_from_adress(mask):
     for i in range(0, len(mask_b)):
         mask_d.append(int(mask_b[i], 2))
 
+    return mask_d
+
+
+def print_mask_in_decimal(mask):
+    mask_d = get_mask_in_decimal_from_adress(mask)
     print("Mask in decimal: {}.{}.{}.{}".format(mask_d[0], mask_d[1], mask_d[2], mask_d[3]))
     f.write("Mask in decimal: {}.{}.{}.{}\n".format(mask_d[0], mask_d[1], mask_d[2], mask_d[3]))
-    return mask_d
 
 
 def get_broadcast_adress_in_binary(IP, mask):
@@ -206,56 +217,57 @@ def max_amount_of_hosts():
 
 
 def subnet_calculator():
-    if not sys.argv[1]:
-        print("no IP adress passed, set default value")
-
-    if not is_ip_adress_valid():
-        print("IP adress is invalid!")
-        return
-    else:
+    if is_ip_adress_passed():
+        if not is_ip_adress_valid():
+            print("IP adress is invalid!")
+            return
         adress = sys.argv[1].split('/');
         IP = adress[0].split('.')
         mask = adress[1]
+    else:
+        print("no IP adress passed, set default value")
+        IP = socket.gethostbyname(socket.gethostname())
+        IP = IP.split('.')
+        mask = "/24"
 
-        for i in range(0, 4):
-            IP[i] = int(IP[i])
-        mask = int(mask)
+    for i in range(0, 4):
+        IP[i] = int(IP[i])
+    mask = int(mask)
 
-        print(sys.argv[1])
-        f.write("\n" + sys.argv[1] + "\n\n")
+    print(sys.argv[1])
+    f.write("\n" + sys.argv[1] + "\n\n")
 
-        adress = get_network_adress(IP, mask)
-        print("\nNetwork adress: {}.{}.{}.{}".format(adress[0], adress[1], adress[2], adress[3]))
-        f.write("Network adress: {}.{}.{}.{}\n".format(adress[0], adress[1], adress[2], adress[3]))
+    adress = get_network_adress(IP, mask)
+    print("\nNetwork adress: {}.{}.{}.{}".format(adress[0], adress[1], adress[2], adress[3]))
+    f.write("Network adress: {}.{}.{}.{}\n".format(adress[0], adress[1], adress[2], adress[3]))
 
-        print("Network class: {}".format(get_network_class(IP)))
-        f.write("Network class: {}\n".format(get_network_class(IP)))
+    print("Network class: {}".format(get_network_class(IP)))
+    f.write("Network class: {}\n".format(get_network_class(IP)))
 
-        print("This network is {}".format(public_or_private_adress(IP)))
-        f.write("This network is {}\n".format(public_or_private_adress(IP)))
+    print("This network is {}".format(public_or_private_adress(IP)))
+    f.write("This network is {}\n".format(public_or_private_adress(IP)))
 
-        print_mask_in_binary(mask)
+    print_mask_in_binary(mask)
+    print_mask_in_decimal(mask)
 
-        get_mask_in_decimal_from_adress(mask)
+    print_broadcast_adress_in_binary(IP, mask)
+    print_broadcast_adress_in_decimal(IP, mask)
 
-        print_broadcast_adress_in_binary(IP, mask)
-        print_broadcast_adress_in_decimal(IP, mask)
+    f_host_b = first_host_adress_in_binary(IP, mask)
+    print("First host adress in binary: {}.{}.{}.{}".format(f_host_b[0], f_host_b[1], f_host_b[2], f_host_b[3]))
+    f.write("First host adress in binary: {}.{}.{}.{}\n".format(f_host_b[0], f_host_b[1], f_host_b[2], f_host_b[3]))
 
-        f_host_b = first_host_adress_in_binary(IP, mask)
-        print("First host adress in binary: {}.{}.{}.{}".format(f_host_b[0], f_host_b[1], f_host_b[2], f_host_b[3]))
-        f.write("First host adress in binary: {}.{}.{}.{}\n".format(f_host_b[0], f_host_b[1], f_host_b[2], f_host_b[3]))
+    f_host = first_host_adress_in_decimal(IP, mask)
+    print("First host adress in decimal: {}.{}.{}.{}".format(f_host[0], f_host[1], f_host[2], f_host[3]))
+    f.write("First host adress in decimal: {}.{}.{}.{}\n".format(f_host[0], f_host[1], f_host[2], f_host[3]))
 
-        f_host = first_host_adress_in_decimal(IP, mask)
-        print("First host adress in decimal: {}.{}.{}.{}".format(f_host[0], f_host[1], f_host[2], f_host[3]))
-        f.write("First host adress in decimal: {}.{}.{}.{}\n".format(f_host[0], f_host[1], f_host[2], f_host[3]))
+    l_host_b = last_host_adress_in_binary(IP, mask)
+    print("Last host adress in binary: {}.{}.{}.{}".format(l_host_b[0], l_host_b[1], l_host_b[2], l_host_b[3]))
+    f.write("Last host adress in binary: {}.{}.{}.{}\n".format(l_host_b[0], l_host_b[1], l_host_b[2], l_host_b[3]))
 
-        l_host_b = last_host_adress_in_binary(IP, mask)
-        print("Last host adress in binary: {}.{}.{}.{}".format(l_host_b[0], l_host_b[1], l_host_b[2], l_host_b[3]))
-        f.write("Last host adress in binary: {}.{}.{}.{}\n".format(l_host_b[0], l_host_b[1], l_host_b[2], l_host_b[3]))
-
-        l_host = last_host_adress_in_decimal(IP, mask)
-        print("Last host adress in decimal: {}.{}.{}.{}".format(l_host[0], l_host[1], l_host[2], l_host[3]))
-        f.write("Last host adress in decimal: {}.{}.{}.{}\n".format(l_host[0], l_host[1], l_host[2], l_host[3]))
+    l_host = last_host_adress_in_decimal(IP, mask)
+    print("Last host adress in decimal: {}.{}.{}.{}".format(l_host[0], l_host[1], l_host[2], l_host[3]))
+    f.write("Last host adress in decimal: {}.{}.{}.{}\n".format(l_host[0], l_host[1], l_host[2], l_host[3]))
 
 
 subnet_calculator()
