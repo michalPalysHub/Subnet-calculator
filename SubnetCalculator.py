@@ -3,6 +3,8 @@
 
 import sys
 
+f = open("subnet_calculator.txt", "a")
+
 
 def is_ip_adress_valid():
     adress = sys.argv[1].split('/');
@@ -47,18 +49,23 @@ def is_ip_adress_valid():
 def get_network_class(IP):
     if 1 <= IP[0] <= 127:
         print("Network class: A")
+        f.write("Network class: A\n")
         return 'A'
     elif 128 <= IP[0] <= 191:
         print("Network class: B")
+        f.write("Network class: B\n")
         return 'B'
     elif 192 <= IP[0] <= 223:
         print("Network class: C")
+        f.write("Network class: C\n")
         return 'C'
     elif 224 <= IP[0] <= 239:
         print("Network class: D")
+        f.write("Network class: D\n")
         return 'D'
     elif 240 <= IP[0] <= 254:
         print("Network class: E")
+        f.write("Network class: E\n")
         return 'E'
 
 
@@ -76,8 +83,10 @@ def public_or_private_adress(IP):
 
     if is_public:
         print("This network is public")
+        f.write("This network is public\n")
     else:
         print("This network is private")
+        f.write("This network is private\n")
 
 
 def get_mask_in_binary_from_adress(mask):
@@ -97,6 +106,7 @@ def print_mask_in_binary(mask):
     for i in range(0,4):
         tmp[i] = tmp[i][2:]
     print("Mask in binary: {}.{}.{}.{}".format(tmp[0], tmp[1], tmp[2], tmp[3]))
+    f.write("Mask in binary: {}.{}.{}.{}\n".format(tmp[0], tmp[1], tmp[2], tmp[3]))
 
 
 def get_mask_in_decimal_from_adress(mask):
@@ -107,6 +117,7 @@ def get_mask_in_decimal_from_adress(mask):
         mask_d.append(int(mask_b[i], 2))
 
     print("Mask in decimal: {}.{}.{}.{}".format(mask_d[0], mask_d[1], mask_d[2], mask_d[3]))
+    f.write("Mask in decimal: {}.{}.{}.{}\n".format(mask_d[0], mask_d[1], mask_d[2], mask_d[3]))
     return mask_d
 
 
@@ -130,6 +141,7 @@ def get_broadcast_adress_in_binary(IP, mask):
 
     tmp3 = tmp3[:8] + "." + tmp3[8:16] + "." + tmp3[16:24] + "." + tmp3[24:32]
     print("Broadcast adress in binary: {}".format(tmp3))
+    f.write("Broadcast adress in binary: {}\n".format(tmp3))
 
     tmp3 = tmp3.split('.')
     for i in range(0,4):
@@ -146,6 +158,7 @@ def get_broadcast_adress_in_decimal(IP, mask):
         decimal.append(int(binary[i], 2))
 
     print("Broadcast adress in decimal: {}.{}.{}.{}".format(decimal[0], decimal[1], decimal[2], decimal[3]))
+    f.write("Broadcast adress in decimal: {}.{}.{}.{}".format(decimal[0], decimal[1], decimal[2], decimal[3]))
     return decimal
 
 
@@ -201,6 +214,7 @@ def subnet_calculator():
         mask = int(mask)
 
         print(sys.argv[1])
+        f.write(sys.argv[1] + "\n\n")
         get_network_adress(IP, mask)
         get_network_class(IP)
         public_or_private_adress(IP)
