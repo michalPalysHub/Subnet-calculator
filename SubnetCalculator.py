@@ -45,24 +45,14 @@ def is_ip_adress_valid():
 
 def get_network_class(IP):
     if 1 <= IP[0] <= 127:
-        print("Network class: A")
-        f.write("Network class: A\n")
         return 'A'
     elif 128 <= IP[0] <= 191:
-        print("Network class: B")
-        f.write("Network class: B\n")
         return 'B'
     elif 192 <= IP[0] <= 223:
-        print("Network class: C")
-        f.write("Network class: C\n")
         return 'C'
     elif 224 <= IP[0] <= 239:
-        print("Network class: D")
-        f.write("Network class: D\n")
         return 'D'
     elif 240 <= IP[0] <= 254:
-        print("Network class: E")
-        f.write("Network class: E\n")
         return 'E'
 
 
@@ -223,7 +213,9 @@ def subnet_calculator():
         print("\nNetwork adress: {}.{}.{}.{}".format(adress[0], adress[1], adress[2], adress[3]))
         f.write("Network adress: {}.{}.{}.{}\n".format(adress[0], adress[1], adress[2], adress[3]))
 
-        get_network_class(IP)
+        print("Network class: {}".format(get_network_class(IP)))
+        f.write("Network class: {}\n".format(get_network_class(IP)))
+
         public_or_private_adress(IP)
         print_mask_in_binary(mask)
         get_mask_in_decimal_from_adress(mask)
