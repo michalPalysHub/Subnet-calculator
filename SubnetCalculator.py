@@ -1,5 +1,6 @@
 import sys
 import socket
+import os
 
 f = open("subnet_calculator.txt", "a")
 
@@ -217,6 +218,16 @@ def total_number_of_hosts(mask):
     return amount
 
 
+def ping_it(ip):
+    print("Ping the ip adress? Y/N:")
+
+    if input() == "Y":
+        os.system("ping " + str(ip))
+
+
+# SUBNET CALCULATOR
+
+
 def subnet_calculator():
     if is_ip_adress_passed():
         if not is_ip_adress_valid():
@@ -276,5 +287,8 @@ def subnet_calculator():
 
     print("Total number of hosts equals {}".format(total_number_of_hosts(mask)))
     f.write("Total number of hosts equals {}\n".format(total_number_of_hosts(mask)))
+
+    ping_it("{}.{}.{}.{}".format(IP[0], IP[1], IP[2], IP[3]))
+
 
 subnet_calculator()
