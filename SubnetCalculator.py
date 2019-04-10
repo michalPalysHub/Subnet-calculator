@@ -69,11 +69,9 @@ def public_or_private_adress(IP):
             is_public = False
 
     if is_public:
-        print("This network is public")
-        f.write("This network is public\n")
+        return "public"
     else:
-        print("This network is private")
-        f.write("This network is private\n")
+        return "private"
 
 
 def get_mask_in_binary_from_adress(mask):
@@ -216,7 +214,9 @@ def subnet_calculator():
         print("Network class: {}".format(get_network_class(IP)))
         f.write("Network class: {}\n".format(get_network_class(IP)))
 
-        public_or_private_adress(IP)
+        print("This network is {}".format(public_or_private_adress(IP)))
+        f.write("This network is {}\n".format(public_or_private_adress(IP)))
+
         print_mask_in_binary(mask)
         get_mask_in_decimal_from_adress(mask)
         get_broadcast_adress_in_decimal(IP, mask)
