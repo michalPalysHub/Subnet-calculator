@@ -99,8 +99,27 @@ def get_broadcast_adress_in_binary(IP, mask):
     return broadcast_binary
 
 
-def subnet_calculator():
+def first_host_adress_in_binary():
+    print "TODO"
 
+
+def first_host_adress_in_decimal():
+    print "TODO"
+
+
+def last_host_adress_in_binary():
+    print "TODO"
+
+
+def last_host_adress_in_decimal():
+    print "TODO"
+
+
+def max_amount_of_hosts():
+    print "TODO"
+
+
+def subnet_calculator():
     if not sys.argv[1]:
         print("no IP adress passed, set default value")
 
@@ -125,6 +144,5 @@ def subnet_calculator():
 
 
 # MAIN
-
 
 subnet_calculator()
