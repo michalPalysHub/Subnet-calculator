@@ -5,7 +5,7 @@ f = open("subnet_calculator.txt", "a")
 
 
 def is_ip_adress_passed():
-    if not sys.argv[1]:
+    if len(sys.argv) < 2:
         return False
     else:
         return True
@@ -224,18 +224,22 @@ def subnet_calculator():
         adress = sys.argv[1].split('/');
         IP = adress[0].split('.')
         mask = adress[1]
+
+        print(sys.argv[1])
+        f.write("\n" + sys.argv[1] + "\n\n")
     else:
         print("no IP adress passed, set default value")
         IP = socket.gethostbyname(socket.gethostname())
+
+        print(IP + "/24")
+        f.write("\n" + IP + "/24" + "\n\n")
+
         IP = IP.split('.')
-        mask = "/24"
+        mask = "24"
 
     for i in range(0, 4):
         IP[i] = int(IP[i])
     mask = int(mask)
-
-    print(sys.argv[1])
-    f.write("\n" + sys.argv[1] + "\n\n")
 
     adress = get_network_adress(IP, mask)
     print("\nNetwork adress: {}.{}.{}.{}".format(adress[0], adress[1], adress[2], adress[3]))
