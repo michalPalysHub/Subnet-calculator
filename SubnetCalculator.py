@@ -1,6 +1,3 @@
-# IP xxx.xxx.xxx.xxx/mask
-#     a . b . c . d /mask
-
 import sys
 
 f = open("subnet_calculator.txt", "a")
@@ -158,7 +155,7 @@ def get_broadcast_adress_in_decimal(IP, mask):
         decimal.append(int(binary[i], 2))
 
     print("Broadcast adress in decimal: {}.{}.{}.{}".format(decimal[0], decimal[1], decimal[2], decimal[3]))
-    f.write("Broadcast adress in decimal: {}.{}.{}.{}".format(decimal[0], decimal[1], decimal[2], decimal[3]))
+    f.write("Broadcast adress in decimal: {}.{}.{}.{}\n".format(decimal[0], decimal[1], decimal[2], decimal[3]))
     return decimal
 
 
@@ -173,15 +170,22 @@ def get_network_adress(IP, Mask):
     for j in range(0, 4):
         adress.append(int(ip[j],2) & int(mask[j],2))
 
-    print("\nNetwork adress: {}.{}.{}.{}".format(adress[0], adress[1], adress[2], adress[3]))
+    return adress
 
 
-def first_host_adress_in_binary():
-    print "TODO"
+def first_host_adress_in_decimal(IP, mask):
+    host = get_network_adress(IP, mask)
+    host[3] += 1
+    return host
 
 
-def first_host_adress_in_decimal():
-    print "TODO"
+def first_host_adress_in_binary(IP, mask):
+    tmp = first_host_adress_in_decimal(IP, mask)
+    host = []
+    for i in range (0, 4):
+        tmp[i] = bin(tmp[i])
+        host.append(tmp[i][2:].zfill(8))
+    return host
 
 
 def last_host_adress_in_binary():
@@ -194,7 +198,6 @@ def last_host_adress_in_decimal():
 
 def max_amount_of_hosts():
     print "TODO"
-
 
 
 def subnet_calculator():
@@ -214,13 +217,25 @@ def subnet_calculator():
         mask = int(mask)
 
         print(sys.argv[1])
-        f.write(sys.argv[1] + "\n\n")
-        get_network_adress(IP, mask)
+        f.write("\n" + sys.argv[1] + "\n\n")
+
+        adress = get_network_adress(IP, mask)
+        print("\nNetwork adress: {}.{}.{}.{}".format(adress[0], adress[1], adress[2], adress[3]))
+        f.write("Network adress: {}.{}.{}.{}\n".format(adress[0], adress[1], adress[2], adress[3]))
+
         get_network_class(IP)
         public_or_private_adress(IP)
         print_mask_in_binary(mask)
         get_mask_in_decimal_from_adress(mask)
         get_broadcast_adress_in_decimal(IP, mask)
+
+        f_host_b = first_host_adress_in_binary(IP, mask)
+        print("First host adress in binary: {}.{}.{}.{}".format(f_host_b[0], f_host_b[1], f_host_b[2], f_host_b[3]))
+        f.write("First host adress in binary: {}.{}.{}.{}\n".format(f_host_b[0], f_host_b[1], f_host_b[2], f_host_b[3]))
+
+        f_host = first_host_adress_in_decimal(IP, mask)
+        print("First host adress in decimal: {}.{}.{}.{}".format(f_host[0], f_host[1], f_host[2], f_host[3]))
+        f.write("First host adress in decimal: {}.{}.{}.{}\n".format(f_host[0], f_host[1], f_host[2], f_host[3]))
 
 
 subnet_calculator()
