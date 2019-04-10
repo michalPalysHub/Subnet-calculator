@@ -218,6 +218,15 @@ def total_number_of_hosts(mask):
     return amount
 
 
+def is_host(IP_adress, network_adress):
+    given_adress_is_host_adress = False
+    for i in range(0, 4):
+        if IP_adress[i] != network_adress[i]:
+            given_adress_is_host_adress = True
+
+    return given_adress_is_host_adress
+
+
 def ping_it(ip):
     print("Ping the ip adress? Y/N:")
 
@@ -288,7 +297,8 @@ def subnet_calculator():
     print("Total number of hosts equals {}".format(total_number_of_hosts(mask)))
     f.write("Total number of hosts equals {}\n".format(total_number_of_hosts(mask)))
 
-    ping_it("{}.{}.{}.{}".format(IP[0], IP[1], IP[2], IP[3]))
+    if is_host(IP, adress):
+        ping_it("{}.{}.{}.{}".format(IP[0], IP[1], IP[2], IP[3]))
 
 
 subnet_calculator()
